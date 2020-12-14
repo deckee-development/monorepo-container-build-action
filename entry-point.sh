@@ -39,7 +39,7 @@ docker tag "${INPUT_CONTAINER_NAME}" "${IMAGE_TO_PUSH}"
 docker push "${IMAGE_TO_PUSH}"
 
 # only tag with latest if on production branch
-if [ $INPUT_STAGE = 'production']; then
+if [ $INPUT_STAGE = "production"]; then
   docker tag "${INPUT_CONTAINER_NAME}" "${IMAGE_TO_PUSH_LATEST}"
   docker push "${IMAGE_TO_PUSH_LATEST}"
 fi
