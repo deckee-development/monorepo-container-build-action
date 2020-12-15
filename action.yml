@@ -12,6 +12,13 @@ runs:
     - id: build-and-push
       run: ${{ github.action_path }}/entry-point.sh
       shell: bash
+      env:
+        INPUT_CONTAINER_NAME: ${{ inputs.container_name }}
+        INPUT_DOCKER_REGISTRY: ${{ inputs.docker_registry }}
+        INPUT_DOCKER_REGISTRY_PASSWORD: ${{ inputs.docker_registry_password }}
+        INPUT_DOCKER_REGISTRY_USERNAME: ${{ inputs.docker_registry_username }}
+        INPUT_COMMAND_TO_RUN: ${{ inputs.command_to_run }}
+        INPUT_STAGE: ${{ inputs.stage }}
 inputs:
   container_name:
     description: The name of the container that this action is building
