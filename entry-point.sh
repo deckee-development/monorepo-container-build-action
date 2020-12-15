@@ -6,11 +6,11 @@ set -e
 # GITHUB_SHA
 
 # only log in if we have a password (assumes username without password doesn't do anything)
-if [[ -n $INPUT_DOCKER_REGISTRY_PASSWORD ]]; then
+if [ -n "${INPUT_DOCKER_REGISTRY_PASSWORD}" ]; then
   echo ${INPUT_DOCKER_REGISTRY_PASSWORD} | docker login ${INPUT_DOCKER_REGISTRY} -u "${INPUT_DOCKER_REGISTRY_USERNAME}" --password-stdin
 fi
 
-if [[ -z $INPUT_DOCKER_REGISTRY ]]; then
+if [ -z "${INPUT_DOCKER_REGISTRY}" ]; then
   # In the event there is no registry, then we'll assume its for the default docker hub registry,
   # in which case the format is username/container-name.
   # This is totally untested but a best guess at the moment...
