@@ -5,8 +5,12 @@ branding:
   color: 'blue'
   icon: 'anchor'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  # using: 'docker'
+  # image: 'Dockerfile'
+  using: "composite"
+  steps: 
+    - run: . entry-point.sh
+      shell: bash
 inputs:
   container_name:
     description: The name of the container that this action is building
