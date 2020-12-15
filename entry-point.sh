@@ -22,9 +22,6 @@ fi
 echo "PREFIX: ${IMAGE_PREFIX}"
 echo "CONTAINER: ${INPUT_CONTAINER_NAME}"
 echo "----------------------------------"
-echo "ENV"
-printenv
-echo "----------------------------------"
 
 SHA=$(echo "${GITHUB_SHA}" | cut -c1-12)
 IMAGE_TO_PULL="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}"
@@ -34,6 +31,7 @@ IMAGE_TO_PUSH_LATEST="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}:latest"
 echo "SHA: ${SHA}"
 echo "IMAGE TO PULL: ${IMAGE_TO_PULL}"
 echo "IMAGE TO PUSH: ${IMAGE_TO_PUSH}"
+echo "----------------------------------"
 
 # Add Arguments For Caching
 BUILDPARAMS=""
@@ -51,6 +49,7 @@ docker push "${IMAGE_TO_PUSH}"
 
 # only tag with latest if on production branch
 if [ $INPUT_STAGE = "production"]; then
+  echo "PRODUCTION BUILD: adding the latest tag"
   docker tag "${INPUT_CONTAINER_NAME}" "${IMAGE_TO_PUSH_LATEST}"
   docker push "${IMAGE_TO_PUSH_LATEST}"
 fi
