@@ -22,6 +22,9 @@ fi
 echo "PREFIX: ${IMAGE_PREFIX}"
 echo "CONTAINER: ${INPUT_CONTAINER_NAME}"
 echo "----------------------------------"
+echo "ENV"
+printenv
+echo "----------------------------------"
 
 SHA=$(echo "${GITHUB_SHA}" | cut -c1-12)
 IMAGE_TO_PULL="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}"

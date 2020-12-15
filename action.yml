@@ -9,7 +9,8 @@ runs:
   # image: 'Dockerfile'
   using: "composite"
   steps: 
-    - run: ${{ github.action_path }}/entry-point.sh
+    - id: build-and-push
+      run: ${{ github.action_path }}/entry-point.sh
       shell: bash
 inputs:
   container_name:
@@ -34,5 +35,7 @@ inputs:
 outputs:
   IMAGE_SHA:
     description: The SHA of the pushed image
+    value: ${{ steps.build-and-push.outputs.IMAGE_SHA }}
   IMAGE_URL:
     description: The full URL of the pushed image
+    value: ${{ steps.build-and-push.outputs.IMAGE_URL }}
