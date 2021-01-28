@@ -6,11 +6,11 @@ set -e
 # GITHUB_SHA
 
 # only log in if we have a password (assumes username without password doesn't do anything)
-if [[ -n "${INPUT_DOCKER_REGISTRY_PASSWORD}" ]]; then
+if [ -n "${INPUT_DOCKER_REGISTRY_PASSWORD}" ]; then
   echo ${INPUT_DOCKER_REGISTRY_PASSWORD} | docker login ${INPUT_DOCKER_REGISTRY} -u "${INPUT_DOCKER_REGISTRY_USERNAME}" --password-stdin
 fi
 
-if [[ -z "${INPUT_DOCKER_REGISTRY}" ]]; then
+if [ -z "${INPUT_DOCKER_REGISTRY}" ]; then
   # In the event there is no registry, then we'll assume its for the default docker hub registry,
   # in which case the format is username/container-name.
   # This is totally untested but a best guess at the moment...
@@ -19,10 +19,19 @@ else
   IMAGE_PREFIX="${INPUT_DOCKER_REGISTRY}"
 fi
 
+echo "PREFIX: ${IMAGE_PREFIX}"
+echo "CONTAINER: ${INPUT_CONTAINER_NAME}"
+echo "----------------------------------"
+
 SHA=$(echo "${GITHUB_SHA}" | cut -c1-12)
 IMAGE_TO_PULL="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}"
 IMAGE_TO_PUSH="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}:${SHA}"
 IMAGE_TO_PUSH_LATEST="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}:latest"
+
+echo "SHA: ${SHA}"
+echo "IMAGE TO PULL: ${IMAGE_TO_PULL}"
+echo "IMAGE TO PUSH: ${IMAGE_TO_PUSH}"
+echo "----------------------------------"
 
 # Add Arguments For Caching
 BUILDPARAMS=""
@@ -37,8 +46,13 @@ eval "$INPUT_COMMAND_TO_RUN"
 
 docker tag "${INPUT_CONTAINER_NAME}" "${IMAGE_TO_PUSH}"
 docker push "${IMAGE_TO_PUSH}"
-docker tag "${INPUT_CONTAINER_NAME}" "${IMAGE_TO_PUSH_LATEST}"
-docker push "${IMAGE_TO_PUSH_LATEST}"
+
+# only tag with latest if on production branch
+if [ $INPUT_STAGE = "production" ]; then
+  echo "PRODUCTION BUILD: adding the latest tag"
+  docker tag "${INPUT_CONTAINER_NAME}" "${IMAGE_TO_PUSH_LATEST}"
+  docker push "${IMAGE_TO_PUSH_LATEST}"
+fi
 
 echo "::set-output name=IMAGE_SHA::${SHA}"
 echo "::set-output name=IMAGE_URL::${IMAGE_TO_PUSH}"

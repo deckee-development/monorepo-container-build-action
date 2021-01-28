@@ -5,8 +5,20 @@ branding:
   color: 'blue'
   icon: 'anchor'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  # using: 'docker'
+  # image: 'Dockerfile'
+  using: "composite"
+  steps: 
+    - id: build-and-push
+      run: ${{ github.action_path }}/entry-point.sh
+      shell: bash
+      env:
+        INPUT_CONTAINER_NAME: ${{ inputs.container_name }}
+        INPUT_DOCKER_REGISTRY: ${{ inputs.docker_registry }}
+        INPUT_DOCKER_REGISTRY_PASSWORD: ${{ inputs.docker_registry_password }}
+        INPUT_DOCKER_REGISTRY_USERNAME: ${{ inputs.docker_registry_username }}
+        INPUT_COMMAND_TO_RUN: ${{ inputs.command_to_run }}
+        INPUT_STAGE: ${{ inputs.stage }}
 inputs:
   container_name:
     description: The name of the container that this action is building
@@ -20,12 +32,17 @@ inputs:
     default: ''
   docker_registry_username:
     description: The username of the registry user
-    required: true
+    required: false
   docker_registry_password:
     description: The password of the registry user
+    required: false
+  stage:
+    description: The CI/CD stage we are building e.g. production or staging or other
     required: true
 outputs:
   IMAGE_SHA:
     description: The SHA of the pushed image
+    value: ${{ steps.build-and-push.outputs.IMAGE_SHA }}
   IMAGE_URL:
     description: The full URL of the pushed image
+    value: ${{ steps.build-and-push.outputs.IMAGE_URL }}
