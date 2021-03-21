@@ -4,6 +4,7 @@ set -e
 # The following environment variables already exist
 # GITHUB_REPOSITORY
 # GITHUB_SHA
+# GITHUB_RUN_NUMBER
 
 # only log in if we have a password (assumes username without password doesn't do anything)
 if [ -n "${INPUT_DOCKER_REGISTRY_PASSWORD}" ]; then
@@ -24,11 +25,27 @@ echo "CONTAINER: ${INPUT_CONTAINER_NAME}"
 echo "----------------------------------"
 
 SHA=$(echo "${GITHUB_SHA}" | cut -c1-12)
+TAG_SUFFIX="${GITHUB_RUN_NUMBER}"
+
+# By adding the build number to the tag we are ensuring the deployment
+# always updates even when the commit SHA is the same.
+if [ -z "${TAG_SUFFIX}" ]; then
+  # we don't have a tag suffix so just set tag to the SHA
+  TAG="${SHA}"
+else
+  # combine SHA and stuffix for tag
+  TAG="${SHA}-${TAG_SUFFIX}"
+fi
+
 IMAGE_TO_PULL="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}"
-IMAGE_TO_PUSH="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}:${SHA}"
+IMAGE_TO_PUSH="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}:${TAG}"
 IMAGE_TO_PUSH_LATEST="${IMAGE_PREFIX}/${INPUT_CONTAINER_NAME}:latest"
 
+echo "IMAGE INFO"
+echo "----------------------------------"
 echo "SHA: ${SHA}"
+echo "TAG SUFFIX: ${TAG_SUFFIX}"
+echo "TAG: ${TAG}"
 echo "IMAGE TO PULL: ${IMAGE_TO_PULL}"
 echo "IMAGE TO PUSH: ${IMAGE_TO_PUSH}"
 echo "----------------------------------"
