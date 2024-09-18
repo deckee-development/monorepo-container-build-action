@@ -71,5 +71,8 @@ if [ $INPUT_STAGE = "production" ]; then
   docker push "${IMAGE_TO_PUSH_LATEST}"
 fi
 
-echo "::set-output name=IMAGE_SHA::${SHA}"
-echo "::set-output name=IMAGE_URL::${IMAGE_TO_PUSH}"
+# https://github.blog/changelog/2022-10-11-github-actions-deprecating-save-state-and-set-output-commands/
+echo "IMAGE_SHA=${SHA}" >> $GITHUB_OUTPUT
+echo "IMAGE_URL=${IMAGE_TO_PUSH}" >> $GITHUB_OUTPUT
+# echo "::set-output name=IMAGE_SHA::${SHA}"
+# echo "::set-output name=IMAGE_URL::${IMAGE_TO_PUSH}"
