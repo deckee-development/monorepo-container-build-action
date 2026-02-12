@@ -4,7 +4,7 @@
 
 This is a quick custom action to for a private project.
 
-The main problem it solves is where you have a monorepo of containers for a micro-service based 
+The main problem it solves is where you have a monorepo of containers for a micro-service based
 system (or similar) and due to shared dependencies, require pre-steps in the build process such
 as copying files so that they become available in the docker build context.
 
@@ -19,17 +19,17 @@ using the `on.push.paths` configuration like so.
 
 ```yaml
 name: Build and push CONTAINER_NAME
-on: 
+on:
   push:
     branches:
       - production
       - development
-    paths: 
+    paths:
       # Only run this action when there are changes in the given container
       - 'path/to/CONTAINER_DIRECTORY/**'
 jobs:
   buildAndPush:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Build and push CONTAINER_NAME
@@ -47,14 +47,14 @@ you can combine into a single action like so.
 
 ```yaml
 name: Build and push containers
-on: 
+on:
   push:
     branches:
       - production
       - development
 jobs:
   buildAndPush:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       - name: Build and push CONTAINER_NAME
@@ -82,14 +82,14 @@ up step.
 
 ```yaml
 name: Build and push containers
-on: 
+on:
   push:
     branches:
       - production
       - development
 jobs:
   buildAndPush:
-    runs-on: ubuntu-latest 
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
       # First container

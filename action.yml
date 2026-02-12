@@ -7,8 +7,8 @@ branding:
 runs:
   # using: 'docker'
   # image: 'Dockerfile'
-  using: "composite"
-  steps: 
+  using: 'composite'
+  steps:
     - id: build-and-push
       run: ${{ github.action_path }}/entry-point.sh
       shell: bash
