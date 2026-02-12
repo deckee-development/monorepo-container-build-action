@@ -18,7 +18,7 @@ runs:
         INPUT_DOCKER_REGISTRY_PASSWORD: ${{ inputs.docker_registry_password }}
         INPUT_DOCKER_REGISTRY_USERNAME: ${{ inputs.docker_registry_username }}
         INPUT_COMMAND_TO_RUN: ${{ inputs.command_to_run }}
-        INPUT_STAGE: ${{ inputs.stage }}
+        INPUT_TAG_AS_LATEST: ${{ inputs.tag_as_latest }}
 inputs:
   container_name:
     description: The name of the container that this action is building
@@ -36,9 +36,10 @@ inputs:
   docker_registry_password:
     description: The password of the registry user
     required: false
-  stage:
-    description: The CI/CD stage we are building e.g. production or staging or other
-    required: true
+  tag_as_latest:
+    description: Whether or not to tag the image as latest. "yes" or "no". Defaults to "yes".
+    required: false
+    default: 'yes'
 outputs:
   IMAGE_SHA:
     description: The SHA of the pushed image
