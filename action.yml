@@ -37,9 +37,8 @@ inputs:
     description: The password of the registry user
     required: false
   tag_as_latest:
-    description: Whether or not to tag the image as latest. "yes" or "no". Defaults to "yes".
-    required: false
-    default: 'yes'
+    description: Whether or not to tag the image as latest. "yes" or "no"
+    required: true
 outputs:
   IMAGE_SHA:
     description: The SHA of the pushed image
